@@ -3,49 +3,47 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class ImageDownloader
+public class ImageSorter
 {
    public static void main(String[] args)
    {
       JSONParser parser = new JSONParser();
       String RESOURCE_FILE_PATH = "./resources/cards.json";
-      String OUTPUT_DIRECTORY = "./images/";
+      String OUTPUT_DIRECTORY = "./imagesSorted/";
+      String TARGET_DIRECTORY = "./images";
       int imageCount = 0;
-      boolean yolo = true;
 
       try
       {
          JSONArray cardArray = (JSONArray) parser.parse(new FileReader(RESOURCE_FILE_PATH));
+         File imageDirectory = new File(TARGET_DIRECTORY);
+         File[] imageList = imageDirectory.listFiles();
 
          for (Object object : cardArray)
          {
             JSONObject card = (JSONObject) object;
 
             String id = (String) card.get("id");
-            String url = (String) card.get("url");
 
-            if (imageCount < 5 || yolo)
+            for (int i = 0; i < imageList.length; i++)
             {
-               try (InputStream in = new URL(url).openStream())
+               if (imageList[i].getName().equals(id + ".png"))
                {
-                  Files.copy(in, Paths.get(OUTPUT_DIRECTORY + id + ".png"));
-                  System.out.println("Downloaded and saved image number " + (imageCount + 1) + ": " + id + ".png");
-
+                  System.out.println(imageList[i].getName());
+                  Files.copy(Paths.get(imageList[i].getPath()), Paths.get(OUTPUT_DIRECTORY + id + ".png"));
                   imageCount++;
-               }
-               catch (IOException ioe)
-               {
-                  ioe.printStackTrace();
+                  break;
                }
             }
          }
+
+         System.out.println("Images sorted: " + imageCount);
       }
       catch (IOException | ParseException e)
       {
