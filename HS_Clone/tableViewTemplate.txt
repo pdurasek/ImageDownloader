@@ -1,0 +1,17 @@
+{
+    "collectible": "collectible",
+    "cost": "cost",
+    "set": "set",
+    "artist": "artist",
+    "health": "health",
+    "mechanics": "mechanics",
+    "type": "type",
+    "flavor": "flavor",
+    "playerClass": "playerClass",
+    "attack": "attack",
+    "name": "name",
+    "id": "id",
+    "text": "text",
+    "dust": "dust",
+    "rarity": "rarity"
+}
